@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} {{instance.title}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+</head>
+<body>
+    <div class="container">
+        {% if request.user in showed or instance.username == request.user  %}
+            <div class="border border-dark">
+                <h3 style="color: royalblue;">Author: {{instance.username}}</h3><br>
+                <h3 style="color: red;" >Title: {{instance.title}}</h3><br>
+                <p>Content: {{instance.content}}</p>
+                <a href="{{instance.file.url}}">{{instance.file}}</a><br>
+                <small>Date Created: {{instance.date_posted}}</small>
+                {% if instance.date_updated != instance.date_posted %}
+                    <small>Date Updated: {{instance.date_updated}}</small>
+                {% endif %}
+                {% if  request.user in commented or instance.username == request.user %}
+                    <form action='{% url 'file' instance.id %}' method="POST">
+                        {% csrf_token %}
+                        <label for="comment">Comment</label>
+                        <input type="text" placeholder="Comment" name="comment" style="width: 330px; height: 100px;">
+                        <button type="submit">Add comment</button>
+                    </form>
+                    {% for comment in comments %}
+                        <div class="border border-dark" >
+                            <h4 style="color: red;">{{comment.user}}</h4>
+                            <p style="color: blue;">{{comment.content}}</p>
+                            <small>Date Created: {{comment.date_comment}}</small>
+                            {% if comment.date_edited != comment.date_comment %}
+                                <small>Date Updated: {{comment.date_edited}}</small>
+                            {% endif %}
+                            <a class="glyphicon glyphicon-trash" href="{% url 'deletecomment' instance.id comment.id %}"></a>
+                            <a class="glyphicon glyphicon-wrench" href="{% url 'editcomment' instance.id comment.id %}"></a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% else %}
+            <h1>Sorry you don have permission</h1>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

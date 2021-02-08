@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+    <title>{{title}}</title>
+</head>
+<body>
+    <div class="container">
+        {% if myfiles %}
+            <h3>Your files</h3><br>
+            {% for file in myfiles  %}
+                <div class="border border-dark">
+                    <h3 style="color: royalblue;">Author: {{file.username}}</h3><br>
+                    <h3 style="color: red;" >Title: {{file.title}}</h3><br>
+                    <small>Created: {{file.date_posted}}</small><br>
+                    {% if file.date_updated != file.date_posted %}
+                        <small>Updated: {{file.date_updated}}</small>
+                    {% endif %}
+                    <p>Content: {{file.content}}</p>
+                    <a href="{{file.file.url}}">{{file.file}}</a><br>
+                    <a href="{% url 'file' file.id %}" style="color:yellowgreen;">You can comment</a>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% for sh in fileShow %}
+            <div class="border border-dark">
+                <h3 style="color: royalblue;">Author: {{sh.username}}</h3><br>
+                <h3 style="color: red;" >Title: {{sh.title}}</h3><br>
+                <small>Created: {{sh.date_posted}}</small><br>
+                {% if sh.date_updated != sh.date_posted %}
+                    <small>Updated: {{sh.date_updated}}</small>
+                {% endif %}
+                <p>Content: {{sh.content}}</p>
+                <a href="{{sh.file.url}}">{{sh.file}}</a><br>
+                {% if sh in fileComment %}
+                    <a href="{% url 'file' sh.id %}" style="color:yellowgreen;">You can comment</a>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

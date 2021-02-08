@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="title">Title</label><br>
+        <input type="text" name="title"><br>
+        <label for="content">Content</label><br>
+        <input type="text" name="content"><br>
+        <label for="file">File</label><br>
+        <input type="file" name="file" required><br>
+    
+        
+        <label for="show">Show Permit</label><br>
+
+        <select name="show" id="show" multiple><br>
+            {% for user in users  %}
+                {% if request.user.username != user.username %}
+                    <option value="{{user.id}}">{{user.username}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br>
+        
+        <label for="comment">Comment permit</label><br>
+        {% for message in messages  %}
+            <p id="messages">{{message}}</p>
+        {% endfor %}
+        <select name="comment" id="comment" multiple ><br>
+            {% for user in users  %}
+                {% if request.user.username != user.username %}
+                    <option value="{{user.id}}">{{user.username}}</option>
+                {% endif %}
+            {% endfor %}
+        </select><br>
+        <button type="submit">Submit</button>
+    </form>
+    
+</body>
+</html>
